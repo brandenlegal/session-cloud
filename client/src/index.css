@@ -1,0 +1,72 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "DM Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+
+  /* Navy surface + cyan accent */
+  --color-surface: oklch(0.16 0.045 260);
+  --color-surface-2: oklch(0.2 0.055 258);
+  --color-border: oklch(0.32 0.05 255);
+  --color-muted: oklch(0.68 0.03 250);
+  --color-fg: oklch(0.97 0.01 250);
+  --color-accent: oklch(0.78 0.14 195);
+  --color-accent-2: oklch(0.72 0.12 210);
+}
+
+html {
+  color-scheme: dark;
+}
+
+body {
+  @apply min-h-dvh bg-surface font-sans text-fg antialiased;
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  background-image:
+    radial-gradient(
+      ellipse 100% 70% at 100% 0%,
+      oklch(0.28 0.09 220 / 0.35),
+      transparent 55%
+    ),
+    radial-gradient(
+      ellipse 80% 50% at 0% 100%,
+      oklch(0.25 0.08 195 / 0.25),
+      transparent 50%
+    );
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* Touch: reduce double-tap zoom delay on controls */
+button,
+a,
+input[type="button"],
+input[type="submit"],
+label[for] {
+  touch-action: manipulation;
+}
+
+:focus-visible {
+  outline: 2px solid oklch(0.72 0.14 195);
+  outline-offset: 2px;
+}
+
+/* Prefer minimum tap targets on primary actions (Tailwind min 11 = 2.75rem ≈ 44px) */
+.tap-44 {
+  min-height: 2.75rem;
+  min-width: 2.75rem;
+}

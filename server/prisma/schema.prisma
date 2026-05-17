@@ -1,0 +1,77 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String    @id @default(uuid())
+  email     String    @unique
+  username  String    @unique
+  password  String
+  createdAt DateTime  @default(now())
+  tracks    Track[]
+  projects  Project[]
+  shares    Share[]
+}
+
+model Project {
+  id          String   @id @default(uuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name        String
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  tracks      Track[]
+  shares      Share[]
+
+  @@index([userId])
+}
+
+model Track {
+  id           String    @id @default(uuid())
+  userId       String
+  user         User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  projectId    String?
+  project      Project?  @relation(fields: [projectId], references: [id], onDelete: SetNull)
+  filename     String
+  originalName String
+  filepath     String
+  filesize     Int
+  format       String
+  duration     Float?
+  bitrate      Int?
+  uploadedAt   DateTime  @default(now())
+  title        String?
+  artist       String?
+  bpm          Float?
+  musicalKey   String?
+  notes        String?
+  shares       Share[]
+
+  @@index([userId])
+  @@index([projectId])
+}
+
+model Share {
+  id        String    @id @default(uuid())
+  token     String    @unique @default(uuid())
+  userId    String
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  trackId   String?
+  track     Track?    @relation(fields: [trackId], references: [id], onDelete: Cascade)
+  projectId String?
+  project   Project?  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  expiresAt DateTime?
+  createdAt DateTime  @default(now())
+  viewCount Int       @default(0)
+
+  @@index([token])
+  @@index([userId])
+  @@index([trackId])
+  @@index([projectId])
+}
