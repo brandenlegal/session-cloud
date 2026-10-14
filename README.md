@@ -1,4 +1,4 @@
-# Session Cloud
+# Session Cloud (DOPE)
 
 Web-based audio file management for production sessions (MVP in progress).
 
